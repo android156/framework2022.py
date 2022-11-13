@@ -1,0 +1,25 @@
+﻿{% extends "base.html" %}
+
+{% block content %}
+<!-- insert the page content here -->
+    <h1>Товары</h1>
+
+    <div>
+        <a href="/">назад на главную</a>
+    </div>
+
+    <br>
+    <br>
+
+    <div>
+        <a href="/create-good/?id={{id}}">Создать новый Товар</a>
+        <br>
+        <h1>Список товаров для категории "{{name}}"</h1>
+        {% for item in objects_list %}
+        <li>
+            {{item.name}} <span><a href="/copy-good/?name={{item.name}}">скопировать</a></span>
+        </li>
+        {% endfor %}
+    </div>
+
+{% endblock content %}

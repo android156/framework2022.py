@@ -1,0 +1,39 @@
+<!DOCTYPE HTML>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>textured_industrial</title>
+    <meta name="description" content="website description"/>
+    <meta name="keywords" content="website keywords, website keywords"/>
+    <!--    <meta http-equiv="content-type" content="text/html; charset=windows-1252"/>-->
+    <!--  <link rel="stylesheet" type="text/css" href="style/style.css" title="style" />-->
+    {% include "style_block.html" %}
+</head>
+
+<body>
+<div id="main">
+    <div id="header">
+        <div id="logo">
+            <div id="logo_text">
+                <!-- class="logo_colour", allows you to change the colour of the text -->
+                <h1><a href="/">Трубы<span class="logo_colour">Теплотрассы</span></a></h1>
+                <h2>Теплотрассы и фреймворк</h2>
+            </div>
+        </div>
+        {% include "menu_bar.html" %}
+    </div>
+    <div id="site_content">
+        {% include "side_bar.html" %}
+
+        <div id="content">
+            {% block content %}
+
+            {% endblock content %}
+        </div>
+
+    </div>
+    {% include "footer.html" %}
+</div>
+</body>
+</html>

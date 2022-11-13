@@ -1,0 +1,16 @@
+﻿{% extends "base.html" %}
+
+{% block content %}
+<!-- insert the page content here -->
+    <div>
+        <a href="/goods/?id={{id}}">назад</a>
+    </div>
+
+    <h1>Создание товара для категории "{{name}}"</h1>
+
+    <form method="post">
+        <input type="text" name="name" placeholder="Название">
+        <button type="submit">Сохранить и вернуться к списку товаров</button>
+    </form>
+
+{% endblock content %}

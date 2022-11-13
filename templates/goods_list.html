@@ -1,0 +1,31 @@
+﻿{% extends "base.html" %}
+
+{% block content %}
+<!-- insert the page content here -->
+    <h1>Все товары</h1>
+
+    <div>
+        <a href="/">назад на главную</a>
+    </div>
+
+    <br>
+    <br>
+
+    <div>
+
+        <br>
+
+        {% for category in objects_list %}
+        <li>
+            <h3><b>{{category.name}}</b> <span><a href="/goods/?id={{category.id}}">Перейти в категорию</a></span></h3>
+            <br>
+            {% for good in category.goods %}
+                <li>
+                    {{good.name}} <span><a href="/copy-good/?name={{good.name}}">скопировать</a></span>
+                </li>
+            {% endfor %}
+        </li>
+        {% endfor %}
+    </div>
+
+{% endblock content %}
