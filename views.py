@@ -8,6 +8,7 @@ logger = Logger('main')
 email_notifier = EmailNotifier()
 sms_notifier = SmsNotifier()
 
+
 class Index:
     def __call__(self, request):
         return '200 OK', render('index.html', objects_list=site.categories)
@@ -176,7 +177,7 @@ class UserCreateView(CreateView):
     def create_obj(self, data: dict):
         name = data['name']
         name = site.decode_value(name)
-        new_obj = site.create_user('user', name)
+        new_obj = site.create_user(name)
         site.users.append(new_obj)
 
 
@@ -191,13 +192,17 @@ class AddStudentByCourseCreateView(CreateView):
         return context
 
     def create_obj(self, data: dict):
-        good_name = data['good_name']
-        good_name = site.decode_value(good_name)
-        good = site.get_good(good_name)
-        user_name = data['user_name']
-        user_name = site.decode_value(user_name)
-        user = site.get_user(user_name)
-        good.add_user(user)
+        try:
+            good_name = data['good_name']
+            good_name = site.decode_value(good_name)
+            good = site.get_good(good_name)
+            user_name = data['user_name']
+            user_name = site.decode_value(user_name)
+            user = site.get_user(user_name)
+            good.add_user(user)
+        except KeyError:
+            print('Нет товаров')
+            return '200 OK', 'No goods have been added yet'
 
 
 @AppRoute(routes=routes, url='/api/')
