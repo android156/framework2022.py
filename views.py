@@ -1,10 +1,12 @@
 from my_framework.templator import render
+from patterns.behavioral_patterns import CreateView, BaseSerializer, EmailNotifier, SmsNotifier, ListView
 from patterns.generating_patterns import Engine, Logger
 from patterns.structural_patterns import AppRoute, Debug
 
 site = Engine()
 logger = Logger('main')
-
+email_notifier = EmailNotifier()
+sms_notifier = SmsNotifier()
 
 class Index:
     def __call__(self, request):
@@ -75,10 +77,15 @@ class CreateGood:
                 category = site.find_category_by_id(int(self.category_id))
 
                 good = site.create_good('pipe', name, category)
+
+                good.observers.append(email_notifier)
+                good.observers.append(sms_notifier)
+
                 site.goods.append(good)
-                print('Все товары : ', [good.name for good in site.goods])
-                print('Имя категории: ', category.name)
-                print('Товары категории: ', [good.name for good in category.goods])
+                # Для отладки
+                # print('Все товары : ', [good.name for good in site.goods])
+                # print('Имя категории: ', category.name)
+                # print('Товары категории: ', [good.name for good in category.goods])
 
             return '200 OK', render('goods.html',
                                     objects_list=category.goods,
@@ -154,3 +161,47 @@ class Contact:
     @Debug(name='Contact')
     def __call__(self, request):
         return '200 OK', render('contact.html', data=request)
+
+
+@AppRoute(routes=routes, url='/users-list/')
+class UserListView(ListView):
+    queryset = site.users
+    template_name = 'users_list.html'
+
+
+@AppRoute(routes=routes, url='/create-user/')
+class UserCreateView(CreateView):
+    template_name = 'create_user.html'
+
+    def create_obj(self, data: dict):
+        name = data['name']
+        name = site.decode_value(name)
+        new_obj = site.create_user('user', name)
+        site.users.append(new_obj)
+
+
+@AppRoute(routes=routes, url='/add-user/')
+class AddStudentByCourseCreateView(CreateView):
+    template_name = 'add_user.html'
+
+    def get_context_data(self):
+        context = super().get_context_data()
+        context['goods'] = site.goods
+        context['users'] = site.users
+        return context
+
+    def create_obj(self, data: dict):
+        good_name = data['good_name']
+        good_name = site.decode_value(good_name)
+        good = site.get_good(good_name)
+        user_name = data['user_name']
+        user_name = site.decode_value(user_name)
+        user = site.get_user(user_name)
+        good.add_user(user)
+
+
+@AppRoute(routes=routes, url='/api/')
+class CourseApi:
+    @Debug(name='GoodApi')
+    def __call__(self, request):
+        return '200 OK', BaseSerializer(site.goods).save()

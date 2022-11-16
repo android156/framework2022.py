@@ -1,0 +1,32 @@
+﻿{% extends "base.html" %}
+
+{% block content %}
+<!-- insert the page content here -->
+
+<div>
+    <ul>
+        <li>
+            <a href="/users-list/">Список пользователей</a>
+        </li>
+        <li>
+            <a href="/create-user/">Создать пользователя</a>
+        </li>
+    </ul>
+    >
+</div>
+<h1>Добавление пользователя к обсуждению товара</h1>
+<form method="post">
+    <select size="3" name="good_name">
+        {% for item in goods %}
+        <option value="{{item.name}}">{{item.name}}</option>
+        {% endfor %}
+    </select>
+    <select size="3" name="user_name">
+        {% for item in users %}
+        <option value="{{item.name}}">{{item.name}}</option>
+        {% endfor %}
+    </select>
+    <button type="submit">Добавить</button>
+</form>
+
+{% endblock content %}

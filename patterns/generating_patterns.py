@@ -1,6 +1,8 @@
 from copy import deepcopy
 from quopri import decodestring
 
+from patterns.behavioral_patterns import Subject
+
 
 # порождающий паттерн Прототип
 class GoodPrototype:
@@ -9,12 +11,30 @@ class GoodPrototype:
         return deepcopy(self)
 
 
+# Пользователь
+
+class User:
+    def __init__(self, name):
+        self.name = name
+        self.goods = []
+
+
 # товар
-class Good(GoodPrototype):
+class Good(GoodPrototype, Subject):
     def __init__(self, name, category):
         self.name = name
         self.category = category
         self.category.goods.append(self)
+        self.users = []
+        super().__init__()
+
+    def __getitem__(self, item):
+        return self.users[item]
+
+    def add_user(self, user: User):
+        self.users.append(user)
+        user.goods.append(self)
+        self.notify()
 
 
 # фитинг
@@ -61,6 +81,11 @@ class Engine:
     def __init__(self):
         self.goods = []
         self.categories = []
+        self.users = []
+
+    @staticmethod
+    def create_user(name):
+        return User(name)
 
     @staticmethod
     def create_good(type_, name, category):
@@ -88,6 +113,11 @@ class Engine:
             if item.name == name:
                 return item
         return None
+
+    def get_user(self, name) -> User:
+        for item in self.users:
+            if item.name == name:
+                return item
 
 
 # порождающий паттерн Синглтон

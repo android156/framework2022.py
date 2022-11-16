@@ -1,0 +1,16 @@
+﻿{% extends "base.html" %}
+
+{% block content %}
+<!-- insert the page content here -->
+    <div>
+        <a href="/users/">назад</a>
+    </div>
+
+    <h2>Создание пользователя для категории</h2>
+
+    <form method="post">
+            <input type="text" name="name" placeholder="Имя">
+            <button type="submit">Сохранить</button>
+    </form>
+
+{% endblock content %}
